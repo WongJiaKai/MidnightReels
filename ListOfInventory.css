@@ -1,0 +1,326 @@
+.menu-container{
+    display: flex;
+    background-color: black;
+    height: 70px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 20px;
+    justify-content: center;
+}
+
+.menu{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    width: 1150px;
+}
+
+.title img{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100px;
+}
+
+.content-container {
+    width: 1150px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.content-container h2 {
+    color: orange;
+    margin-bottom: 20px;
+}
+
+/* 整个数据表格容器 */
+.data-table {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+/* 表头和表行共同的 Flex 样式 */
+.table-header, .table-row {
+    display: flex;
+    padding: 15px 20px;
+}
+
+/* 让每个字段等宽平分空间 */
+.table-header span, .table-row span {
+    flex: 1; 
+    text-align: left;
+}
+
+/* 表头高亮 */
+.table-header {
+    background-color: #262626;
+    font-weight: bold;
+    color: orange;
+    border-bottom: 2px solid #333;
+}
+
+.table-row:hover {
+    background-color: #252525; /* 鼠标放上去变亮，很有系统高级感 */
+}
+
+.no-data {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+}
+
+.table-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-bottom: 1px solid #262626;
+    background-color: #1a1a1a;
+    color: white;
+    transition: background 0.2s;
+}
+
+/* 2. 操作面板外层（隐形桥梁） */
+.row-actions {
+    position: absolute;
+    right: -145px;          /* 👈 核心：用负数把整个面板强行推到表格的外边界之外 */
+    top: 0;
+    height: 100%;
+    width: 160px;           /* 宽度与右移距离一致 */
+    display: flex;
+    align-items: center;
+    
+    /* 🛠️ 暗黑科技：表格和外部按钮之间有空隙，鼠标移过去会穿过“真空区”导致按钮消失。
+       我们通过设置一个透明的 padding-left，把这个真空区变成按钮容器的“身体”。
+       鼠标踩在空白处，其实依然踩在 .row-actions 内部，所以绝对不会消失！ */
+    padding-left: 20px;     
+    box-sizing: border-box;
+
+    opacity: 0;             /* 默认隐藏 */
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+}
+
+.table-row:hover .row-actions {
+    opacity: 1;
+    visibility: visible;
+}
+
+.action-card {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    width: 100%;
+}
+
+.action-btn {
+    display: block;
+    text-decoration: none;
+    background: transparent;
+    color: #cccccc;
+    border: none;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.action-btn:hover {
+    background-color: #383838;
+    color: white;
+}
+
+.edit-btn:hover{
+    background-color: gray;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+    color: white;
+}
+
+.add-btn{
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: orange;
+    color: black;
+    margin-left: 935px;
+}
+
+/* 弹窗遮罩层：全屏半透明黑底 */
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明黑 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;          /* 保证浮在最最上层 */
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 激活状态：当给 modal-wrapper 加上 .active 类时显示 */
+.modal-wrapper.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 弹窗主体盒子 */
+.modal-content {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    width: 450px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* 弹窗头部排版 */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+}
+
+.modal-header h3 { 
+    margin: 0; 
+    color: orange; 
+}
+
+.close-btn { 
+    font-size: 24px; 
+    cursor: pointer; 
+    color: #888; 
+}
+
+.close-btn:hover { 
+    color: white; 
+}
+
+/* 表单单组样式 */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px; 
+    color: orange; 
+    font-weight: bold; 
+}
+
+.form-group input, .form-group select {
+    background-color: #262626;
+    border: 1px solid #444;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+    outline: none;
+}
+
+/* 底部按钮 */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.cancel-btn { 
+    background: #333; 
+    color: white; 
+    border: none; 
+    padding: 10px 16px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+}
+
+.save-btn { 
+    background: orange; 
+    color: black; 
+    border: none; 
+    padding: 10px 16px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 10px 0;
+    border: none;
+    border-radius: 200px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active { background-color: orange; color: #000000; }
+.toggle-btn.inactive { background-color: transparent; color: #888888; }
+
+.toggle-container {
+    margin-top: 15px;
+    background-color: #2a2a2a;
+    border-radius: 200px;
+    padding: 7px;
+    display: flex;
+    width: 450px;
+    height: 40px;
+    margin-left: 800px;
+}
+
+header #titleImg{
+    margin: 5px 10px;
+}
+
+header #titleImg img{
+    margin-top: 0px;
+    height: 75px;
+    width: auto;  
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(64, 64, 65);
+    gap: 10px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+header img{
+    margin-top: 15px;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-left: 10px;
+}
+
+h2 button{
+    cursor: pointer;
+}
